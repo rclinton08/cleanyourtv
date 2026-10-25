@@ -8,7 +8,7 @@ the network lives here instead.
 
 | Part | What it does |
 |---|---|
-| **Immich screensaver** (`PhotoDream`) | Recent photos from Immich in the manner of Google Photos' ambient mode: crossfades and a slow zoom, two portraits side by side, a blurred copy of the photo instead of black bars, the album, date, place and people bottom left and the clock bottom right. Albums and tags can be hidden. Needs Immich 3.2 or later. |
+| **Immich screensaver** (`PhotoDream`) | Recent photos from Immich in the manner of Google Photos' ambient mode: crossfades and a slow zoom, two portraits side by side, a blurred copy of the photo instead of black bars, the album, date, place and people bottom left and the clock bottom right. Albums and tags can be hidden, or a specific set of albums can be shown exclusively. Needs Immich 3.2 or later. |
 | **Homelab** tile (`MainActivity`) | One launcher tile, with tabs across the top and a clock. Moving along the tabs switches pages; Down goes into a page, Up from its top and Back return to the tabs. |
 | **Dashboard** tab (`DashboardPage`) | Your [Homepage](https://gethomepage.dev) dashboard in a card under the tabs. Up/Down scroll it, Menu reloads, links to other hosts are blocked. A loading screen, an error screen that says what failed with Try again and Settings, a reload when you come back after a while, and optionally the screen kept on for a wall display. |
 | **Search** tab (`SearchPage`, `DetailActivity`) | One field for films and shows; Radarr and Sonarr are asked at once as you type, and the results are one grid of posters, best match first, with a tick on what you already have. OK on a poster shows its backdrop, ratings and overview with **Add and search** focused, so adding is a single press; quality and (for a show) which episodes to monitor sit next to it. Something already in the library offers **Search again**. Voice search when the TV has a recogniser. |
@@ -136,6 +136,7 @@ missing shows "not set up" with a way into Settings.
 | `immich.url`, `immich.api_key` | | Server and key. The URL is the address you open Immich at, without `/api`. |
 | `immich.recent_days` | 90 | Photos taken in this many days. |
 | `immich.max_photos` | 500 | At most this many per round, newest first. Max 5000. |
+| `immich.include_albums` | `[]` | Album names or ids to show exclusively. If set, `exclude_albums` is ignored. |
 | `immich.exclude_albums` | `[]` | Album names (case-insensitive) or ids. |
 | `immich.exclude_tags` | `[]` | Tag names, full tag paths (`People/Work`) or ids. |
 | `immich.shuffle` | `true` | Random order; `false` shows newest first. |

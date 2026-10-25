@@ -20,7 +20,8 @@ public class ImmichTest {
                         null,
                         250,
                         Collections.emptyList(),
-                        Collections.emptyList());
+                        Collections.emptyList(),
+                        false);
         JSONObject f = b.getJSONObject("filter");
         assertEquals("IMAGE", f.getJSONObject("type").getString("eq"));
         assertEquals("timeline", f.getJSONObject("visibility").getString("eq"));
@@ -50,7 +51,8 @@ public class ImmichTest {
                                 "c2",
                                 10,
                                 Arrays.asList("a1", "a2"),
-                                Collections.singletonList("t1"))
+                                Collections.singletonList("t1"),
+                                false)
                         .getJSONObject("filter");
         assertEquals(
                 new JSONArray("[\"a1\",\"a2\"]").toString(),
@@ -58,7 +60,7 @@ public class ImmichTest {
         assertEquals("t1", f.getJSONObject("tagIds").getJSONArray("none").getString(0));
         assertEquals(
                 "c2",
-                Immich.searchBody("x", "c2", 10, Collections.emptyList(), Collections.emptyList())
+                Immich.searchBody("x", "c2", 10, Collections.emptyList(), Collections.emptyList(), false)
                         .getString("cursor"));
     }
 

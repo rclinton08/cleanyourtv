@@ -81,10 +81,14 @@ final class Immich {
      * max_photos.
      */
     List<Photo> recentPhotos(long nowMillis) throws IOException {
-        List<String> albums =
-                cfg.excludeAlbums.isEmpty()
-                        ? Collections.emptyList()
-                        : resolveIds(albums(), cfg.excludeAlbums, "albumName");
+        List<String> albums;
+        if (!cfg.includeAlbums.isEmpty()) {
+            albums = cfg.includeAlbums;
+        } else {
+            albums = cfg.excludeAlbums.isEmpty()
+                            ? Collections.emptyList()
+                            : resolveIds(albums(), cfg.excludeAlbums, "albumName");
+        }
         // "name" is the tag itself, "value" its full path (People/Work); either may be configured.
         List<String> tags =
                 cfg.excludeTags.isEmpty()
@@ -99,7 +103,7 @@ final class Immich {
                     parsePage(
                             http.post(
                                     cfg.url + "/api/search/metadata",
-                                    searchBody(after, cursor, size, albums, tags).toString()));
+                                    searchBody(after, cursor, size, albums, tags, !cfg.includeAlbums.isEmpty()).toString()));
             photos.addAll(p.photos);
             cursor = p.nextCursor;
             if (cursor == null) {
@@ -173,7 +177,7 @@ final class Immich {
     private String newestPhotoId() throws IOException {
         String everything = takenAfter(System.currentTimeMillis(), 36500);
         JSONObject body =
-                searchBody(everything, null, 1, Collections.emptyList(), Collections.emptyList());
+                searchBody(everything, null, 1, Collections.emptyList(), Collections.emptyList(), false);
         Page p = parsePage(http.post(cfg.url + "/api/search/metadata", body.toString()));
         return p.photos.isEmpty() ? null : p.photos.get(0).id;
     }
@@ -209,7 +213,7 @@ final class Immich {
      * first, with the EXIF and people the captions use, minus the given albums and tags.
      */
     static JSONObject searchBody(
-            String after, String cursor, int size, List<String> hideAlbums, List<String> hideTags) {
+            String after, String cursor, int size, List<String> hideAlbums, List<String> hideTags, boolean includeOnly) {
         try {
             JSONObject filter =
                     new JSONObject()
@@ -218,7 +222,7 @@ final class Immich {
                             .put("visibility", new JSONObject().put("eq", "timeline"))
                             .put("takenAt", new JSONObject().put("gte", after));
             if (!hideAlbums.isEmpty()) {
-                filter.put("albumIds", new JSONObject().put("none", new JSONArray(hideAlbums)));
+                filter.put("albumIds", new JSONObject().put(includeOnly ? "any" : "none", new JSONArray(hideAlbums)));
             }
             if (!hideTags.isEmpty()) {
                 filter.put("tagIds", new JSONObject().put("none", new JSONArray(hideTags)));

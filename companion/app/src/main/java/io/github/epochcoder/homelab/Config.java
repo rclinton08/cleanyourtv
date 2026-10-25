@@ -57,6 +57,9 @@ final class Config {
         /** Album names (case-insensitive) or ids whose photos never show. */
         final List<String> excludeAlbums;
 
+        /** Album names or ids to show exclusively. If set, excludeAlbums is ignored. */
+        final List<String> includeAlbums;
+
         /** Tag names or full tag paths ("People/Work"), or ids, whose photos never show. */
         final List<String> excludeTags;
 
@@ -86,6 +89,7 @@ final class Config {
             recentDays = clamp(o.optInt("recent_days", 90), 1, 36500);
             maxPhotos = clamp(o.optInt("max_photos", 500), 1, 5000);
             excludeAlbums = strings(o.optJSONArray("exclude_albums"));
+            includeAlbums = strings(o.optJSONArray("include_albums"));
             excludeTags = strings(o.optJSONArray("exclude_tags"));
             shuffle = o.optBoolean("shuffle", true);
             intervalSeconds = clamp(o.optInt("interval_seconds", 20), 5, 3600);

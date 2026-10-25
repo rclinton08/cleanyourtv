@@ -5,6 +5,7 @@
     "api_key": "PASTE-IMMICH-API-KEY",
     "recent_days": 90,
     "max_photos": 500,
+    "include_albums": [],
     "exclude_albums": ["Screenshots"],
     "exclude_tags": ["Private"],
     "shuffle": true,
