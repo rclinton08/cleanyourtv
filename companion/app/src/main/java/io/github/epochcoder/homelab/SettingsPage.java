@@ -23,6 +23,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -313,9 +314,26 @@ final class SettingsPage extends Page {
         number(im, "max_photos", R.string.s_max_photos, 500);
         pickMany(
                 im,
+                "include_albums",
+                "Include albums",
+                () -> {
+                    try {
+                        return names(immich(im).albums(), "albumName");
+                    } catch (IOException e) {
+                        return Collections.emptyList();
+                    }
+                });
+        pickMany(
+                im,
                 "exclude_albums",
                 R.string.s_exclude_albums,
-                () -> names(immich(im).albums(), "albumName"));
+                () -> {
+                    try {
+                        return names(immich(im).albums(), "albumName");
+                    } catch (IOException e) {
+                        return Collections.emptyList();
+                    }
+                });
         pickMany(
                 im,
                 "exclude_tags",
@@ -491,6 +509,14 @@ final class SettingsPage extends Page {
         return r;
     }
 
+    private Row row(String title) {
+        View v = LayoutInflater.from(host).inflate(R.layout.item_setting, pane, false);
+        Row r = new Row(v);
+        r.title.setText(title);
+        pane.addView(v);
+        return r;
+    }
+
     private void text(JSONObject s, String key, int label, int variation, boolean secret) {
         Row r = row(label);
         Runnable bind =
@@ -605,6 +631,10 @@ final class SettingsPage extends Page {
 
     /** The current choice as the value; OK loads the server's list and offers it as checkboxes. */
     private void pickMany(JSONObject s, String key, int label, Fetch fetch) {
+        pickMany(s, key, host.getString(label), fetch);
+    }
+
+    private void pickMany(JSONObject s, String key, String label, Fetch fetch) {
         Row r = row(label);
         Runnable bind =
                 () ->

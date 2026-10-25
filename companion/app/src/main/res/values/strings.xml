@@ -148,6 +148,7 @@
     <string name="s_details">Album, date, place and people</string>
     <string name="s_motion">Slow zoom</string>
     <string name="s_pair">Portraits side by side</string>
+    <string name="s_include_albums">Include albums</string>
     <string name="s_exclude_albums">Hide albums</string>
     <string name="s_exclude_tags">Hide tags</string>
     <string name="s_preview">Preview the screensaver</string>

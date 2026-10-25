@@ -83,7 +83,7 @@ final class Immich {
     List<Photo> recentPhotos(long nowMillis) throws IOException {
         List<String> albums;
         if (!cfg.includeAlbums.isEmpty()) {
-            albums = cfg.includeAlbums;
+            albums = resolveIds(albums(), cfg.includeAlbums, "albumName");
         } else {
             albums = cfg.excludeAlbums.isEmpty()
                             ? Collections.emptyList()
@@ -241,6 +241,7 @@ final class Immich {
             if (cursor != null) {
                 body.put("cursor", cursor);
             }
+            android.util.Log.d("ImmichDebug", "Search Body: " + body.toString());
             return body;
         } catch (JSONException e) {
             throw new AssertionError(e);
